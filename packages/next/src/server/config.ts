@@ -1364,6 +1364,7 @@ export default async function loadConfig(
           nextConfigPath: path,
           configFileName,
           cwd: dir,
+          phase,
         })
       } else {
         userConfigModule = await import(pathToFileURL(path).href)
