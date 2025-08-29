@@ -6,6 +6,13 @@ import {
 } from './utils'
 
 const isRspack = process.env.NEXT_RSPACK !== undefined
+const enableNewScrollHandler = Boolean(
+  process.env.__NEXT_EXPERIMENTAL_APP_NEW_SCROLL_HANDLER
+)
+
+const innerScrollAndFocusHandlerName = enableNewScrollHandler
+  ? 'InnerScrollAndFocusHandlerNew'
+  : 'InnerScrollAndFocusHandlerOld'
 
 describe('Cache Components Errors', () => {
   const { next, isTurbopack, isNextStart, skipped } = nextTestSetup({
@@ -224,7 +231,7 @@ describe('Cache Components Errors', () => {
                    at HTTPAccessFallbackBoundary (bundler:///<next-src>)
                    at LoadingBoundary (bundler:///<next-src>)
                    at ErrorBoundary (bundler:///<next-src>)
-                   at InnerScrollAndFocusHandler (bundler:///<next-src>)
+                   at ${innerScrollAndFocusHandlerName} (bundler:///<next-src>)
                    at ScrollAndFocusHandler (bundler:///<next-src>)
                    at RenderFromTemplateContext (bundler:///<next-src>)
                    at OuterLayoutRouter (bundler:///<next-src>)
@@ -238,7 +245,7 @@ describe('Cache Components Errors', () => {
                    at HTTPAccessFallbackBoundary (bundler:///<next-src>)
                    at LoadingBoundary (bundler:///<next-src>)
                    at ErrorBoundary (bundler:///<next-src>)
-                   at InnerScrollAndFocusHandler (bundler:///<next-src>)
+                   at ${innerScrollAndFocusHandlerName} (bundler:///<next-src>)
                    at ScrollAndFocusHandler (bundler:///<next-src>)
                    at RenderFromTemplateContext (bundler:///<next-src>)
                    at OuterLayoutRouter (bundler:///<next-src>)
@@ -698,7 +705,7 @@ describe('Cache Components Errors', () => {
                    at HTTPAccessFallbackBoundary (bundler:///<next-src>)
                    at LoadingBoundary (bundler:///<next-src>)
                    at ErrorBoundary (bundler:///<next-src>)
-                   at InnerScrollAndFocusHandler (bundler:///<next-src>)
+                   at ${innerScrollAndFocusHandlerName} (bundler:///<next-src>)
                    at ScrollAndFocusHandler (bundler:///<next-src>)
                    at RenderFromTemplateContext (bundler:///<next-src>)
                    at OuterLayoutRouter (bundler:///<next-src>)
@@ -712,7 +719,7 @@ describe('Cache Components Errors', () => {
                    at HTTPAccessFallbackBoundary (bundler:///<next-src>)
                    at LoadingBoundary (bundler:///<next-src>)
                    at ErrorBoundary (bundler:///<next-src>)
-                   at InnerScrollAndFocusHandler (bundler:///<next-src>)
+                   at ${innerScrollAndFocusHandlerName} (bundler:///<next-src>)
                    at ScrollAndFocusHandler (bundler:///<next-src>)
                    at RenderFromTemplateContext (bundler:///<next-src>)
                    at OuterLayoutRouter (bundler:///<next-src>)
@@ -731,7 +738,7 @@ describe('Cache Components Errors', () => {
                    at HTTPAccessFallbackBoundary (bundler:///<next-src>)
                    at LoadingBoundary (bundler:///<next-src>)
                    at ErrorBoundary (bundler:///<next-src>)
-                   at InnerScrollAndFocusHandler (bundler:///<next-src>)
+                   at ${innerScrollAndFocusHandlerName} (bundler:///<next-src>)
                    at ScrollAndFocusHandler (bundler:///<next-src>)
                    at RenderFromTemplateContext (bundler:///<next-src>)
                    at OuterLayoutRouter (bundler:///<next-src>)
@@ -745,7 +752,7 @@ describe('Cache Components Errors', () => {
                    at HTTPAccessFallbackBoundary (bundler:///<next-src>)
                    at LoadingBoundary (bundler:///<next-src>)
                    at ErrorBoundary (bundler:///<next-src>)
-                   at InnerScrollAndFocusHandler (bundler:///<next-src>)
+                   at ${innerScrollAndFocusHandlerName} (bundler:///<next-src>)
                    at ScrollAndFocusHandler (bundler:///<next-src>)
                    at RenderFromTemplateContext (bundler:///<next-src>)
                    at OuterLayoutRouter (bundler:///<next-src>)
@@ -2106,7 +2113,7 @@ describe('Cache Components Errors', () => {
                      at HTTPAccessFallbackBoundary (bundler:///<next-src>)
                      at LoadingBoundary (bundler:///<next-src>)
                      at ErrorBoundary (bundler:///<next-src>)
-                     at InnerScrollAndFocusHandler (bundler:///<next-src>)
+                     at ${innerScrollAndFocusHandlerName} (bundler:///<next-src>)
                      at ScrollAndFocusHandler (bundler:///<next-src>)
                      at RenderFromTemplateContext (<anonymous>)
                      at OuterLayoutRouter (bundler:///<next-src>)
@@ -2119,7 +2126,7 @@ describe('Cache Components Errors', () => {
                      at HTTPAccessFallbackBoundary (bundler:///<next-src>)
                      at LoadingBoundary (bundler:///<next-src>)
                      at ErrorBoundary (bundler:///<next-src>)
-                     at InnerScrollAndFocusHandler (bundler:///<next-src>)
+                     at ${innerScrollAndFocusHandlerName} (bundler:///<next-src>)
                      at ScrollAndFocusHandler (bundler:///<next-src>)
                      at RenderFromTemplateContext (<anonymous>)
                      at OuterLayoutRouter (bundler:///<next-src>)
@@ -2130,7 +2137,7 @@ describe('Cache Components Errors', () => {
                      at HTTPAccessFallbackBoundary (bundler:///<next-src>)
                      at LoadingBoundary (bundler:///<next-src>)
                      at ErrorBoundary (bundler:///<next-src>)
-                     at InnerScrollAndFocusHandler (bundler:///<next-src>)
+                     at ${innerScrollAndFocusHandlerName} (bundler:///<next-src>)
                      at ScrollAndFocusHandler (bundler:///<next-src>)
                      at RenderFromTemplateContext (<anonymous>)
                      at OuterLayoutRouter (bundler:///<next-src>)
@@ -3079,7 +3086,7 @@ describe('Cache Components Errors', () => {
                      at HTTPAccessFallbackBoundary (bundler:///<next-src>)
                      at LoadingBoundary (bundler:///<next-src>)
                      at ErrorBoundary (bundler:///<next-src>)
-                     at InnerScrollAndFocusHandler (bundler:///<next-src>)
+                     at ${innerScrollAndFocusHandlerName} (bundler:///<next-src>)
                      at ScrollAndFocusHandler (bundler:///<next-src>)
                      at RenderFromTemplateContext (bundler:///<next-src>)
                      at OuterLayoutRouter (bundler:///<next-src>)
@@ -3093,7 +3100,7 @@ describe('Cache Components Errors', () => {
                      at HTTPAccessFallbackBoundary (bundler:///<next-src>)
                      at LoadingBoundary (bundler:///<next-src>)
                      at ErrorBoundary (bundler:///<next-src>)
-                     at InnerScrollAndFocusHandler (bundler:///<next-src>)
+                     at ${innerScrollAndFocusHandlerName} (bundler:///<next-src>)
                      at ScrollAndFocusHandler (bundler:///<next-src>)
                      at RenderFromTemplateContext (bundler:///<next-src>)
                      at OuterLayoutRouter (bundler:///<next-src>)

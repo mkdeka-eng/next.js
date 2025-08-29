@@ -158,9 +158,23 @@ function shouldSkipElement(element: HTMLElement) {
 /**
  * Check if the top corner of the HTMLElement is in the viewport.
  */
-function topOfElementInViewport(element: HTMLElement, viewportHeight: number) {
-  const rect = element.getBoundingClientRect()
-  return rect.top >= 0 && rect.top <= viewportHeight
+function topOfElementInViewport(
+  instance: HTMLElement | FragmentInstance,
+  viewportHeight: number
+) {
+  const rects = instance.getClientRects()
+  if (rects.length === 0) {
+    // Just to be explicit.
+    return false
+  }
+  let elementTop = Number.POSITIVE_INFINITY
+  for (let i = 0; i < rects.length; i++) {
+    const rect = rects[i]
+    if (rect.top < elementTop) {
+      elementTop = rect.top
+    }
+  }
+  return elementTop >= 0 && elementTop <= viewportHeight
 }
 
 /**
@@ -331,19 +345,19 @@ function InnerScrollAndFocusHandlerNew(props: ScrollAndFocusHandlerProps) {
           return
         }
 
-        let domNode: FragmentInstance | HTMLElement | null = null
+        let instance: FragmentInstance | HTMLElement | null = null
         const hashFragment = focusAndScrollRef.hashFragment
 
         if (hashFragment) {
-          domNode = getHashFragmentDomNode(hashFragment)
+          instance = getHashFragmentDomNode(hashFragment)
         }
 
-        if (!domNode) {
-          domNode = childrenRef.current
+        if (!instance) {
+          instance = childrenRef.current
         }
 
         // If there is no DOM node this layout-router level is skipped. It'll be handled higher-up in the tree.
-        if (domNode === null) {
+        if (instance === null) {
           return
         }
 
@@ -352,10 +366,38 @@ function InnerScrollAndFocusHandlerNew(props: ScrollAndFocusHandlerProps) {
         focusAndScrollRef.hashFragment = null
         focusAndScrollRef.segmentPaths = []
 
-        const alignToTop = false
         disableSmoothScrollDuringRouteTransition(
-          // @ts-expect-error -- Needs `@types/react-dom` update
-          domNode.experimental_scrollIntoView.bind(domNode, alignToTop),
+          () => {
+            // In case of hash scroll, we only need to scroll the element into view
+            if (hashFragment) {
+              // @ts-expect-error -- Needs `@types/react-dom` update
+              instance.scrollIntoView()
+
+              return
+            }
+            // Store the current viewport height because reading `clientHeight` causes a reflow,
+            // and it won't change during this function.
+            const htmlElement = document.documentElement
+            const viewportHeight = htmlElement.clientHeight
+
+            // If the element's top edge is already in the viewport, exit early.
+            if (topOfElementInViewport(instance, viewportHeight)) {
+              return
+            }
+
+            // Otherwise, try scrolling go the top of the document to be backward compatible with pages
+            // scrollIntoView() called on `<html/>` element scrolls horizontally on chrome and firefox (that shouldn't happen)
+            // We could use it to scroll horizontally following RTL but that also seems to be broken - it will always scroll left
+            // scrollLeft = 0 also seems to ignore RTL and manually checking for RTL is too much hassle so we will scroll just vertically
+            htmlElement.scrollTop = 0
+
+            // Scroll to domNode if domNode is not in viewport when scrolled to top of document
+            if (!topOfElementInViewport(instance, viewportHeight)) {
+              // Scroll into view doesn't scroll horizontally by default when not needed
+              // @ts-expect-error -- Needs `@types/react-dom` update
+              instance.scrollIntoView()
+            }
+          },
           {
             // We will force layout by querying domNode position
             dontForceLayout: true,
@@ -367,7 +409,7 @@ function InnerScrollAndFocusHandlerNew(props: ScrollAndFocusHandlerProps) {
         focusAndScrollRef.onlyHashChange = false
 
         // Set focus on the element
-        domNode.focus()
+        instance.focus()
       }
     },
     // Used to run on every commit. We may be able to be smarter about this
